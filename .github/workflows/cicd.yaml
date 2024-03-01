@@ -1,0 +1,19 @@
+name: Build Pipeline
+
+on:
+  push:
+    branches: ['main']
+  workflow_dispatch:
+
+    permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: ${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  get-env:
+  run: |
+    echo 'hello world'
