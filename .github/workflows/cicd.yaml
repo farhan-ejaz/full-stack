@@ -30,6 +30,8 @@ jobs:
           NETLIFY_SITE_ID: 4683c5bf-0c7e-4cf7-8d1f-cea16ff8c99f
           NETLIFY_DEPLOY_TO_PROD: true
           build_directory: 'dist'
+      - run: ls 
+        if always()    
       - name: deployment summary
         run: |
           echo ${{steps.netlify.outputs.NETLIFY_PREVIEW_URL }}
