@@ -17,12 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: start
-        run: |
-          echo 'starting deployment pipeline'
+        run: echo 'starting deployment pipeline'
       - uses: actions/checkout@v3
         name: checkout code
-      - run: ls
-      - run: pw  
+      - run: pwd
+      - run: ls 
       - uses: jsmrcaga/action-netlify-deploy@v2.0.0
         id: netlify
         name: deploy to netlify
@@ -32,4 +31,4 @@ jobs:
           NETLIFY_DEPLOY_TO_PROD: true
       - name: deployment summary
         run: |
-          echo ${{steps.netlify.outputs.NETLIFY_PREVIEW_URL }}    
+          echo ${{steps.netlify.outputs.NETLIFY_PREVIEW_URL }}
