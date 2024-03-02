@@ -1,4 +1,88 @@
-let todos = [];
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo App</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row my-3">
+        <div class="col-12">
+          <h1 class="text-center bg-primary text-white">(2023 SEM-II) FULL STACK DEVOPS PROJECT</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <table class="table table-striped">
+            <thead>
+              <th class="d-none">Id</th>
+              <th></th>
+              <th>Title</th>
+              <th>Priority</th>
+              <th></th>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-header h5 text-center">Add Task</div>
+            <div class="card-body">
+              <div id="errorMessage"></div>
+              <form id="form">
+                <input type="hidden" id="id" name="id" value="" />
+                <div class="mb-3">
+                  <label for="title" class="form-label">Title</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="priority" class="form-label">Priority</label>
+                  <select
+                    class="form-select"
+                    id="priority"
+                    name="priority"
+                    required
+                  >
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                  </select>
+                </div>
+                <button
+                  type="button"
+                  onclick="addTodo()"
+                  class="btn btn-primary"
+                >
+                  Add
+                </button>
+                <button
+                  type="button"
+                  onclick="clearTodo()"
+                  class="btn btn-secondary"
+                >
+                  Clear
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col-12 bg-secondary text-white text-center">
+          &#169;Mohammed Farhan Ejaz
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./js/index.js"></script>
+    <script>
+      let todos = [];
 // let todos = [
 //     {id : 1, title : 'Learn JavaScript', priority: 'high'},
 //     {id : 2, title : 'Learn React', priority: 'medium'},
@@ -76,7 +160,7 @@ function renderTodos() {
     tdButtons.appendChild(deleteButton);
     const editButton = document.createElement("i");
     editButton.id = todo.id;
-    editButton.className = "fa fa-pen-to-square mx-2";
+    editButton.className = "fa fa-edit mx-2";
     editButton.onclick = editTodo;
     tdButtons.appendChild(editButton);
 
@@ -152,3 +236,7 @@ function completeTodo(event){
 }
 
 renderTodos();
+
+    </script>
+  </body>
+</html>

@@ -26,7 +26,7 @@ jobs:
         name: deploy to netlify
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: mfn-239029005
+          NETLIFY_SITE_ID: mfn-239028005
           NETLIFY_DEPLOY_TO_PROD: true
       - name: deployment summary
         run: |
