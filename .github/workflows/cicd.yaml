@@ -30,7 +30,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: 4683c5bf-0c7e-4cf7-8d1f-cea16ff8c99f
           NETLIFY_DEPLOY_TO_PROD: true
-          build_directory: 'dist'
+          build_directory: 'src/dist'
       - run: ls    
       - name: deployment summary
         run: |
