@@ -2,7 +2,10 @@ name: Build Pipeline
 
 on:
   push:
+    branches: ["main", "feature/*"]
+  pull_request:
     branches: ["main"]
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
@@ -10,27 +13,87 @@ permissions:
 
 concurrency:
   group: ${{ github.event_name }}-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
+
+env:
+  RELEASE_REQUIRED: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+  NODEJS_VERSION: 18
 
 jobs:
-  build:
+  Build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: start
+      - name: 🎬 Start
         run: echo 'starting deployment pipeline'
       - uses: actions/checkout@v3
-        name: checkout code
-      - run: pwd
-      - run: ls 
-      - uses: jsmrcaga/action-netlify-deploy@v2.0.0
-        id: netlify
-        name: deploy to netlify
+        name: ✅ Checkout
+      - name: ⚙️ Install NodeJS ${{env.NODEJS_VERSION}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+      - name: 🖇️ Install Dependencies
+        run: npm install
+      - name: 📲 Compile
+        run: |
+          npm run build  
+      - name: ⬆️ Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: src/dist/
+          name: build-${{ github.run_id }}
+          retention-days: 1
+  Deploy:
+    name: Deploy
+    needs: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          path: dist
+          name: build-${{ github.run_id }}
+      - name: ⚙️ Set Temp WebSite
+        uses: nelonoel/branch-name@v1.0.1          
+      - id: Deploy
+        name: 🌐 Deploy to netlify
+        uses: jsmrcaga/action-netlify-deploy@v2.0.0
         continue-on-error: true
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: 4683c5bf-0c7e-4cf7-8d1f-cea16ff8c99f
-          NETLIFY_DEPLOY_TO_PROD: true
-          build_directory: 'src/dist'    
-      - name: deployment summary
+          NETLIFY_DEPLOY_TO_PROD: ${{ env.RELEASE_REQUIRED }}
+          build_directory: "dist"
+          install_command: "echo Skipping installing the dependencies"
+          build_command: "echo Skipping building the web files"
+          deploy_alias: ${{ env.BRANCH_NAME }}
+      - name: ⚙️ Status check
+        uses: Sibz/github-status-action@v1.1.1
+        with:
+          authToken: ${{ secrets.CI_TOKEN }}
+          context: Netlify preview
+          state: success
+          target_url: ${{ env.NETLIFY_PREVIEW_URL }} 
+  Release:
+    name: Release
+    needs: Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+        name: ✅ Checkout
+      - name: ⚙️ Install NodeJS ${{env.NODEJS_VERSION}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+      - name: ⚙️ Install Conventional Commits
+        run: npm install conventional-changelog-conventionalcommits
+      - name: 🏷️ Tag
+        id: tag-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_TOKEN }}
+          GIT_AUTHOR_NAME: devops_team_2
+          GIT_COMMITTER_NAME: devops_team_2
         run: |
-          echo ${{steps.netlify.outputs.NETLIFY_PREVIEW_URL }}
+          npx semantic-release --debug
