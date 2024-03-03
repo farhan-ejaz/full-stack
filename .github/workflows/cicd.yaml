@@ -26,10 +26,10 @@ jobs:
     steps:
       - name: 🎬 Start
         run: echo 'starting deployment pipeline'
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: ✅ Checkout
       - name: ⚙️ Install NodeJS ${{env.NODEJS_VERSION}}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODEJS_VERSION }}
       - name: 🖇️ Install Dependencies
@@ -38,7 +38,7 @@ jobs:
         run: |
           npm run build  
       - name: ⬆️ Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: src/dist/
           name: build-${{ github.run_id }}
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: dist
           name: build-${{ github.run_id }}
@@ -68,7 +68,7 @@ jobs:
           build_command: "echo Skipping building the web files"
           deploy_alias: ${{ env.BRANCH_NAME }}
       - name: ⚙️ Status check
-        uses: Sibz/github-status-action@v1.1.1
+        uses: Sibz/github-status-action@v1.1.6
         with:
           authToken: ${{ secrets.CI_TOKEN }}
           context: Netlify preview
@@ -81,10 +81,10 @@ jobs:
     environment: ${{ inputs.environment }}
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: ✅ Checkout
       - name: ⚙️ Install NodeJS ${{env.NODEJS_VERSION}}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODEJS_VERSION }}
       - name: ⚙️ Install Conventional Commits
