@@ -36,10 +36,7 @@ jobs:
         run: npm install
       - name: 📲 Compile
         run: |
-          npm run build
-      - run: |
-          ls
-          ls src/dist    
+          npm run build  
       - name: ⬆️ Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -56,11 +53,11 @@ jobs:
         with:
           path: dist
           name: build-${{ github.run_id }}
-      - run: ls dist  
-      - uses: nelonoel/branch-name@v1.0.1          
-      - uses: jsmrcaga/action-netlify-deploy@v2.0.0
-        id: Deploy
+      - name: ⚙️ Set Temp WebSite
+        uses: nelonoel/branch-name@v1.0.1          
+      - id: Deploy
         name: 🌐 Deploy to netlify
+        uses: jsmrcaga/action-netlify-deploy@v2.0.0
         continue-on-error: true
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -70,14 +67,13 @@ jobs:
           install_command: "echo Skipping installing the dependencies"
           build_command: "echo Skipping building the web files"
           deploy_alias: ${{ env.BRANCH_NAME }}
-      - name: Status check
+      - name: ⚙️ Status check
         uses: Sibz/github-status-action@v1.1.1
         with:
           authToken: ${{ secrets.CI_TOKEN }}
           context: Netlify preview
           state: success
           target_url: ${{ env.NETLIFY_PREVIEW_URL }} 
-
   Release:
     name: Release
     needs: Deploy
