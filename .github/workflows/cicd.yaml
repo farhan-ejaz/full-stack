@@ -86,7 +86,7 @@ jobs:
       - name: ⚙️ Install NodeJS ${{env.NODEJS_VERSION}}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODEJS_VERSION }}
+          node-version: 18
       - name: ⚙️ Install Conventional Commits
         run: npm install conventional-changelog-conventionalcommits
       - name: 🏷️ Tag
