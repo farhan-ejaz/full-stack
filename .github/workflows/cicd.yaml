@@ -17,7 +17,7 @@ concurrency:
 
 env:
   RELEASE_REQUIRED: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-  NODEJS_VERSION: 18
+  NODEJS_VERSION: 21
 
 jobs:
   Build:
