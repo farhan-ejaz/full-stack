@@ -78,7 +78,7 @@ jobs:
     needs: deploy-app
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
-    if: ${{ 'true' == env.RELEASE_REQUIRED }}
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
         name: ✅ Checkout
