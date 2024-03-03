@@ -1,0 +1,68 @@
+branches:
+- main
+
+plugins:
+- - "@semantic-release/commit-analyzer"
+  - preset: angular
+- - "@semantic-release/release-notes-generator"
+  - preset: angular
+- - "@semantic-release/github"
+  - assets:
+    - path: dist/*.*
+      label: dist
+
+analyzeCommits:
+  - path: "@semantic-release/commit-analyzer"
+    releaseRules:
+    - type: "feat"
+      release: "minor"
+    - type: "hotfix"
+      release: "patch"
+    - type: "fix"
+      release: "patch"
+    - type: "perf"
+      release: "patch"
+    - type: "chore"
+      release: "patch"
+    - type: "docs"
+      release: "patch"
+    - type: "ci"
+      release: "patch"
+    - type: "refactor"
+      release: "patch"
+    - type: "revert"
+      release: "patch"
+    - type: "test"
+      release: "patch"
+    - type: "style"
+      release: "minor"
+
+generateNotes:
+  - path: "@semantic-release/release-notes-generator"
+    writerOpts:
+      groupBy: "type"
+      commitGroupsSort:
+        - "feat"
+        - "fix"
+        - "style"
+        - "hotfix"
+      commitsSort: "header"
+    types:
+    - type: "feat"
+    - section: "Features"
+    # Tracked bug fix with a hotfix branch
+    - type: "hotfix"
+    - section: "Hot Fix"
+    - type: "fix"
+    - section: "Bug Fixes"
+    # Uninmportent fix (CI testing, etc)
+    presetConfig: true
+
+publish:
+  - path: "@semantic-release/github"
+
+success:
+  - "@semantic-release/github"
+
+fail:
+  - "@semantic-release/github"
