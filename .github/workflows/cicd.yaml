@@ -17,7 +17,7 @@ concurrency:
 
 env:
   RELEASE_REQUIRED: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-  NODEJS_VERSION: 18
+  NODEJS_VERSION: 21
 
 jobs:
   Build:
@@ -86,7 +86,7 @@ jobs:
       - name: ⚙️ Install NodeJS ${{env.NODEJS_VERSION}}
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: ${{ env.NODEJS_VERSION }}
       - name: ⚙️ Install Conventional Commits
         run: npm install conventional-changelog-conventionalcommits
       - name: 🏷️ Tag
