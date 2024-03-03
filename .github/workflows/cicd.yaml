@@ -37,10 +37,13 @@ jobs:
       - name: 📲 Compile
         run: |
           npm run build
+      - run: |
+          ls
+          ls src/dist    
       - name: ⬆️ Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          path: src/dist/*
+          path: src/dist/
           name: build-${{ github.run_id }}
           retention-days: 1
   Deploy:
@@ -51,7 +54,7 @@ jobs:
       - name: ⬇️ Download Artifact
         uses: actions/download-artifact@v3
         with:
-          path: dist/*
+          path: dist
           name: build-${{ github.run_id }}
       - run: ls dist  
       - uses: nelonoel/branch-name@v1.0.1          
