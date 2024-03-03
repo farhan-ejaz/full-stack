@@ -53,7 +53,7 @@ jobs:
         with:
           path: dist/*
           name: build-${{ github.run_id }}
-      - run: ls    
+      - run: ls dist  
       - uses: nelonoel/branch-name@v1.0.1          
       - uses: jsmrcaga/action-netlify-deploy@v2.0.0
         id: Deploy
